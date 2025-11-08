@@ -1,6 +1,8 @@
 "use client"; 
 
 import React, { useState, useMemo, useEffect } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useSelector, useDispatch } from 'react-redux'; // Import Redux hooks
 import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
 import {
@@ -10,15 +12,22 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { Token, SortConfig, Category } from "@/lib/types"; // Import from types file
-import { InfoIcon } from "@/components/icons"; // Import from icons file
+import { Token, SortConfig, Category } from "@/lib/types";
+import { InfoIcon } from "@/components/icons";
 import { TokenTable } from "@/components/organisms/TokenTable";
-import { TableSkeleton } from "@/components/organisms/TableSkeleton";
+import {TableSkeleton} from "@/components/organisms/TableSkeleton";
 import { TokenDetailModal } from "@/components/organisms/TokenDetailModal";
+import {
+  setActiveCategory,
+  setSortConfig,
+  selectActiveCategory,
+  selectSortConfig,
+} from '@/lib/store/uiSlice'; // Import actions and selectors
+import { RootState, AppDispatch } from '@/lib/store/store'; // Import types
+
 
 // --- Mock Data ---
-// This data will be moved to React Query
-const Z = "https://placehold.co/64x64/18181b/9ca3af?text="; // Placeholder URL
+const Z = "https://placehold.co/64x64/18181b/9ca3af?text=";
 const initialTokens: Token[] = [
   { id: "1", name: "WETH", slug: "weth", logo: `${Z}WETH`, price: 3789.45, priceChange24h: -1.2, tvl: 345000000, volume24h: 123000000, category: "new" },
   { id: "2", name: "USDC", slug: "usdc", logo: `${Z}USDC`, price: 1.00, priceChange24h: 0.0, tvl: 5000000000, volume24h: 789000000, category: "new" },
@@ -37,127 +46,151 @@ const categories: Category[] = [
   { id: "migrated", name: "Migrated", description: "Tokens migrated from a previous version." },
 ];
 
-// --- Main App Component ---
-export default function Home() {
-  const [e, t] = useState<Token[]>(initialTokens); // [tokens, setTokens]
-  const [o, r] = useState<Category['id']>("new"); // [activeCategory, setActiveCategory]
-  const [n, s] = useState(true); // [isLoading, setIsLoading]
-  const [a, l] = useState<Token | null>(null); // [selectedToken, setSelectedToken]
-  const [i, m] = useState<SortConfig>({ key: "tvl", direction: "descending" }); // [sortConfig, setSortConfig]
-
-  // Simulate initial data load
-  useEffect(() => {
-    const p = setTimeout(() => {
-      t(initialTokens);
-      s(false); // setIsLoading
+// Mock API call
+const fetchTokens = (): Promise<Token[]> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(initialTokens);
     }, 1500);
-    return () => clearTimeout(p);
-  }, []);
+  });
+};
 
-  // --- MOCK WebSocket for real-time updates ---
+
+export default function Home() {
+  const queryClient = useQueryClient();
+  const dispatch = useDispatch<AppDispatch>(); // Get the dispatch function
+
+  // --- Read UI state from Redux ---
+  const activeCategory = useSelector(selectActiveCategory);
+  const sortConfig = useSelector(selectSortConfig);
+  
+  // --- Local state for modal ---
+  const [selectedToken, setSelectedToken] = useState<Token | null>(null);
+
+  // --- Data Fetching with React Query ---
+  const { data: tokens, isLoading } = useQuery({
+    queryKey: ['tokens'],
+    queryFn: fetchTokens,
+    initialData: initialTokens,
+    staleTime: 1000 * 60,
+  });
+
+  // MOCK WebSocket for real-time updates (This logic is unchanged)
   useEffect(() => {
-    if (n) return; // Don't run if loading
-    const p = setInterval(() => { // interval
-      t((prevTokens) => { // setTokens
-        const g = Math.floor(Math.random() * prevTokens.length); // randomIndex
-        const f = [...prevTokens]; // newTokens
-        const h = f[g]; // tokenToUpdate
-        const v = h.price * (1 + (Math.random() - 0.495) * 0.05); // newPrice
-        f[g] = {
-          ...h,
-          price: v,
-          priceChange24h: h.priceChange24h + (Math.random() - 0.5) * 0.1,
-          volume24h: h.volume24h + Math.random() * 10000,
+    if (isLoading) return; 
+    const priceUpdateInterval = setInterval(() => {
+      queryClient.setQueryData(['tokens'], (prevTokens: Token[] | undefined) => {
+        if (!prevTokens) return [];
+        
+        const randomIndex = Math.floor(Math.random() * prevTokens.length);
+        const newTokens = [...prevTokens];
+        const tokenToUpdate = newTokens[randomIndex];
+        const newPrice = tokenToUpdate.price * (1 + (Math.random() - 0.495) * 0.05);
+        
+        newTokens[randomIndex] = {
+          ...tokenToUpdate,
+          price: newPrice,
+          priceChange24h: tokenToUpdate.priceChange24h + (Math.random() - 0.5) * 0.1,
+          volume24h: tokenToUpdate.volume24h + Math.random() * 10000,
         };
-        return f;
+        return newTokens;
       });
     }, 2000);
-    return () => clearInterval(p);
-  }, [n]); // Dependency on isLoading
+    return () => clearInterval(priceUpdateInterval);
+  }, [isLoading, queryClient]);
 
-  // --- Memoized Sorting and Filtering ---
-  const p = useMemo(() => { // filteredAndSortedTokens
-    let p = [...e]; // tokens
+  // --- Memoized Sorting and Filtering (Uses Redux state) ---
+  const filteredAndSortedTokens = useMemo(() => {
+    let currentTokens = [...(tokens || [])];
     
     // Filter
-    if (o === "new") p = p.filter((g) => g.category === "new");
-    else if (o === "stretch") p = p.filter((g) => g.category === "stretch");
-    else if (o === "migrated") p = p.filter((g) => g.category === "migrated");
+    currentTokens = currentTokens.filter(token => token.category === activeCategory);
 
     // Sort
-    if (i) { // sortConfig
-      p.sort((g, f) => {
-        let h = g[i.key]; // valA
-        let v = f[i.key]; // valB
-        if (i.key === "name") {
-          h = (h as string).toLowerCase();
-          v = (v as string).toLowerCase();
+    if (sortConfig) {
+      currentTokens.sort((a, b) => {
+        let valA = a[sortConfig.key];
+        let valB = b[sortConfig.key];
+        
+        if (sortConfig.key === "name") {
+          valA = (valA as string).toLowerCase();
+          valB = (valB as string).toLowerCase();
         }
-        if (i.direction === "ascending") {
-          return h > v ? 1 : h < v ? -1 : 0;
+
+        if (sortConfig.direction === "ascending") {
+          return valA > valB ? 1 : valA < valB ? -1 : 0;
         } else {
-          return h < v ? 1 : h > v ? -1 : 0;
+          return valA < valB ? 1 : valA > valB ? -1 : 0;
         }
       });
     }
-    return p;
-  }, [e, o, i]); // [tokens, activeCategory, sortConfig]
+    return currentTokens;
+  }, [tokens, activeCategory, sortConfig]); // Now depends on Redux state
 
-  const g = (key: keyof Token) => { // handleSort
-    m((prevConfig) => { // setSortConfig
-      if (prevConfig && prevConfig.key === key) {
-        return {
-          key,
-          direction: prevConfig.direction === "ascending" ? "descending" : "ascending",
-        };
-      }
-      return { key, direction: "descending" };
-    });
+  // --- Event Handlers (Dispatch Redux Actions) ---
+  const handleSort = (key: keyof Token) => {
+    // Create new sort config
+    let newSortConfig: SortConfig;
+    if (sortConfig && sortConfig.key === key) {
+      newSortConfig = {
+        key,
+        direction: sortConfig.direction === "ascending" ? "descending" : "ascending",
+      };
+    } else {
+      newSortConfig = { key, direction: "descending" };
+    }
+    // Dispatch the action to Redux
+    dispatch(setSortConfig(newSortConfig));
+  };
+
+  const handleCategoryChange = (categoryId: Category['id']) => {
+    // Dispatch the action to Redux
+    dispatch(setActiveCategory(categoryId));
   };
 
   return (
     <TooltipProvider>
-      <Dialog onOpenChange={(open) => !open && l(null)}>
+      <Dialog onOpenChange={(open) => !open && setSelectedToken(null)}>
         <main className="min-h-screen bg-zinc-950 p-4 md:p-8 font-sans text-white">
           <div className="max-w-7xl mx-auto">
             <h1 className="text-3xl font-bold text-white mb-2">Token Discovery</h1>
             <p className="text-lg text-zinc-400 mb-8">Discover the latest and trending tokens on the platform.</p>
 
-            {/* --- Category Tabs --- */}
+            {/* --- Category Tabs (dispatch action onClick) --- */}
             <div className="flex items-center gap-2 mb-4">
-              {categories.map((f) => ( // category
+              {categories.map((category) => (
                 <Button
-                  key={f.id}
-                  variant={o === f.id ? "secondary" : "ghost"}
-                  className={cn("gap-2", o === f.id ? "text-white" : "text-zinc-400")}
-                  onClick={() => r(f.id)}
+                  key={category.id}
+                  variant={activeCategory === category.id ? "secondary" : "ghost"}
+                  className={cn("gap-2", activeCategory === category.id ? "text-white" : "text-zinc-400")}
+                  onClick={() => handleCategoryChange(category.id)} // Use new handler
                 >
-                  {f.name}
+                  {category.name}
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <InfoIcon className="h-4 w-4 text-zinc-500" />
                     </TooltipTrigger>
-                    <TooltipContent className="max-w-xs">{f.description}</TooltipContent>
+                    <TooltipContent className="max-w-xs">{category.description}</TooltipContent>
                   </Tooltip>
                 </Button>
               ))}
             </div>
 
-            {/* --- Table Section --- */}
+            {/* --- Table Section (reads from Redux) --- */}
             <div className="rounded-lg border border-zinc-800 bg-zinc-900/50 overflow-hidden">
-              {n ? TableSkeleton : (
+              {isLoading && filteredAndSortedTokens.length === 0 ? <TableSkeleton /> : ( 
                 <TokenTable
-                  tokens={p}
-                  onSort={g}
-                  sortConfig={i}
-                  onTokenSelect={(f) => { l(f); }}
+                  tokens={filteredAndSortedTokens}
+                  onSort={handleSort} // Uses new handler
+                  sortConfig={sortConfig} // Reads from Redux
+                  onTokenSelect={(token) => { setSelectedToken(token); }}
                 />
               )}
             </div>
           </div>
 
           {/* --- Token Modal --- */}
-          <TokenDetailModal token={a} />
+          <TokenDetailModal token={selectedToken} />
 
           <footer className="text-center text-zinc-500 mt-8">
             This is a demo. All data is mock and for illustrative purposes only.

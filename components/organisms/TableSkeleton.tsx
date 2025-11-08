@@ -9,7 +9,9 @@ import {
 } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export const TableSkeleton = (
+// We wrap the JSX in a function () => ( ... )
+// to export a valid React component, not just a JSX element.
+export const TableSkeleton = () => (
   <Table>
     <TableHeader>
       <TableRow>

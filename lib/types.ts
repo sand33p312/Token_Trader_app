@@ -1,5 +1,4 @@
 // We need a central place for our data types.
-// Create this new file in `lib/types.ts`
 
 export type Token = {
   id: string;
