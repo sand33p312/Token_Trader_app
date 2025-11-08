@@ -1,36 +1,126 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Axiom Frontend Task - Token Discovery Table
 
-## Getting Started
+This project is a high-fidelity, production-grade replica of the Axiom Trade token discovery table. It is built with a focus on performance, clean architecture, and real-time data handling.
 
-First, run the development server:
+🚀 Deliverables
 
-```bash
+Live Vercel Deployment: https://tokentrader-one.vercel.app/
+
+YouTube Demo: https://YOUR_YOUTUBE_LINK_HERE
+
+✨ Features Implemented
+
+Pixel-Perfect UI: A close replica of the Axiom "Pulse" page, built with Tailwind CSS and shadcn/ui.
+
+Three Token Categories: "New pairs," "Final Stretch," and "Migrated" tabs.
+
+Real-time Price Updates: A mock WebSocket updates token prices every 2 seconds, triggering a green/red "flash" animation on the price cell.
+
+Advanced State Management:
+
+React Query (@tanstack/react-query): Handles all asynchronous data fetching, caching, and real-time cache updates from the mock socket.
+
+Redux Toolkit (@reduxjs/toolkit): Manages all complex UI state, such as the active category and sorting configuration.
+
+Interactive Table:
+
+Sorting: Click any table header (Token, Price, TVL, etc.) to sort the list.
+
+Tooltips: Informational tooltips on category tabs.
+
+Modal: Click any token row to open a detailed modal for that token.
+
+Loading States: A shadcn/ui skeleton loader is displayed while the initial data is being fetched.
+
+Atomic Architecture: The project is structured using atomic design principles for maximum reusability and maintainability.
+
+Fully Responsive: The layout is fully responsive down to 320px, with the table becoming horizontally scrollable on small screens.
+
+🛠 Technical Stack
+
+This project fulfills all technical requirements from the task prompt:
+
+Framework: Next.js 14 (App Router)
+
+Language: TypeScript (Strict)
+
+Styling: Tailwind CSS
+
+UI Components: shadcn/ui (Button, Table, Dialog, Tooltip, Skeleton)
+
+Data Fetching: React Query
+
+State Management: Redux Toolkit
+
+Optimization: React.memo for rows, useMemo for sorting, next/image for optimized images.
+
+📂 Project Structure
+
+The codebase follows an Atomic Design methodology:
+
+/src
+├── @types          # (from shadcn)
+├── app             # Next.js App Router
+│   ├── layout.tsx  # Root layout with providers
+│   └── page.tsx    # Main page component (assembles organisms)
+├── components
+│   ├── ui          # Atoms (shadcn components)
+│   ├── icons.tsx   # Atoms (custom icons)
+│   ├── molecules
+│   │   └── TokenRow.tsx
+│   └── organisms
+│       ├── TokenTable.tsx
+│       ├── TokenDetailModal.tsx
+│       └── TableSkeleton.tsx
+└── lib
+    ├── QueryProvider.tsx
+    ├── types.ts
+    └── store
+        ├── ReduxProvider.tsx
+        ├── store.ts
+        └── uiSlice.ts
+
+
+⚙️ Running Locally
+
+Clone the repository:
+
+git clone [https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git](https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git)
+cd YOUR_REPO_NAME
+
+
+Install dependencies:
+
+npm install
+
+
+Run the development server:
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open http://localhost:3000 to view the application.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+📱 Responsive Design Snapshots
 
-## Learn More
+As required, the application is fully responsive.
 
-To learn more about Next.js, take a look at the following resources:
+Desktop (1920px)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Tablet (768px)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Mobile (320px)
 
-## Deploy on Vercel
+(Your desktop screenshot here)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+(Your tablet screenshot here)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+(Your mobile screenshot here)
+
+[Desktop Screenshot]
+
+[Tablet Screenshot]
+
+[Mobile Screenshot]
+
+(Note: Please take your own screenshots and replace the placeholders above.)
