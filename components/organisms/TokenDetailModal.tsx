@@ -25,10 +25,11 @@ export const TokenDetailModal = ({ token }: { token: Token | null }) => {
           <Image
             src={token.logo}
             alt={token.name}
-            className="rounded-full" // width/height props handle sizing
-            width={40}  // h-10 is 40px
-            height={40} // w-10 is 40px
+            className="rounded-full"
+            width={40}
+            height={40}
             onError={(e) => (e.target as HTMLImageElement).src = `${Z}${token.name}`}
+            unoptimized={true} // --- ADD THIS LINE ---
           />
           <div>
             <DialogTitle className="text-xl">{token.name}</DialogTitle>
@@ -37,7 +38,6 @@ export const TokenDetailModal = ({ token }: { token: Token | null }) => {
         </div>
       </DialogHeader>
       <div className="grid gap-4 py-4">
-        {/* ... rest of the modal content ... */}
         <div className="grid grid-cols-2 items-center gap-4">
           <span className="text-zinc-400">Price</span>
           <span className="text-white text-right font-medium">{k.format(token.price)}</span>
