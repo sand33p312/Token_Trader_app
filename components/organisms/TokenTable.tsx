@@ -36,32 +36,33 @@ export const TokenTable = ({ tokens, onSort, sortConfig, onTokenSelect }: TokenT
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[250px]">
-            <button className="flex items-center gap-1 text-zinc-400 hover:text-white" onClick={() => handleSort("name")}>
+          {/* --- FIX 2: Added text-zinc-400 to the TableHead --- */}
+          <TableHead className="w-[250px] text-zinc-400">
+            <button className="flex items-center gap-1 hover:text-white transition-colors" onClick={() => handleSort("name")}>
               Token <SortIcon sortConfig={sortConfig} columnKey="name" />
             </button>
           </TableHead>
-          <TableHead className="text-right">
-            <button className="flex items-center gap-1 justify-end w-full text-zinc-400 hover:text-white" onClick={() => handleSort("price")}>
+          <TableHead className="text-right text-zinc-400">
+            <button className="flex items-center gap-1 justify-end w-full hover:text-white transition-colors" onClick={() => handleSort("price")}>
               Price <SortIcon sortConfig={sortConfig} columnKey="price" />
             </button>
           </TableHead>
-          <TableHead className="text-right">
-            <button className="flex items-center gap-1 justify-end w-full text-zinc-400 hover:text-white" onClick={() => handleSort("priceChange24h")}>
+          <TableHead className="text-right text-zinc-400">
+            <button className="flex items-center gap-1 justify-end w-full hover:text-white transition-colors" onClick={() => handleSort("priceChange24h")}>
               24h % <SortIcon sortConfig={sortConfig} columnKey="priceChange24h" />
             </button>
           </TableHead>
-          <TableHead className="text-right">
-            <button className="flex items-center gap-1 justify-end w-full text-zinc-400 hover:text-white" onClick={() => handleSort("tvl")}>
+          <TableHead className="text-right text-zinc-400">
+            <button className="flex items-center gap-1 justify-end w-full hover:text-white transition-colors" onClick={() => handleSort("tvl")}>
               TVL <SortIcon sortConfig={sortConfig} columnKey="tvl" />
             </button>
           </TableHead>
-          <TableHead className="text-right">
-            <button className="flex items-center gap-1 justify-end w-full text-zinc-400 hover:text-white" onClick={() => handleSort("volume24h")}>
+          <TableHead className="text-right text-zinc-400">
+            <button className="flex items-center gap-1 justify-end w-full hover:text-white transition-colors" onClick={() => handleSort("volume24h")}>
               24h Volume <SortIcon sortConfig={sortConfig} columnKey="volume24h" />
             </button>
           </TableHead>
-          {/* --- END OF FIX --- */}
+          {/* --- END OF FIX 2 --- */}
         </TableRow>
       </TableHeader>
       <TableBody>
