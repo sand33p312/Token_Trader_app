@@ -44,18 +44,19 @@
 
 ---
 
-## 🧩 Code Architecture Overview
+## 🧱 Code Architecture Overview
 
-src/
-├─ app/ # Next.js App Router structure
-├─ components/
-│ ├─ atoms/ # Icons, buttons
-│ ├─ molecules/ # TokenRow, Modals
-│ └─ organisms/ # TokenTable, DetailModal
-├─ store/ # Redux Toolkit slices
-├─ hooks/ # Custom hooks for query & UI state
-├─ utils/ # Helper functions
-└─ types/ # TypeScript definitions
+| Folder | Description |
+|---------|-------------|
+| `app/` | Next.js App Router structure |
+| `components/atoms/` | Icons, buttons |
+| `components/molecules/` | TokenRow, Modals |
+| `components/organisms/` | TokenTable, DetailModal |
+| `store/` | Redux Toolkit slices |
+| `hooks/` | Custom hooks for query & UI state |
+| `utils/` | Helper functions |
+| `types/` | TypeScript definitions |
+
 
 ---
 
