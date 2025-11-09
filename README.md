@@ -11,7 +11,7 @@
 |------|------|
 | **Live Deployment** | 🔗 [tokentrader-one.vercel.app](https://tokentrader-one.vercel.app/) |
 | **GitHub Repo** | 💻 [github.com/sand33p312/Token_Trader_app](https://github.com/sand33p312/Token_Trader_app.git) |
-| **Video Demo** | 🎥 (YouTube link here) |
+| **Video Demo** | 🎥 https://www.loom.com/share/0821d43bea2c4ef4af104907e86e6fc1 |
 | **Responsive Snapshots** | 🖼️ [View on GitHub](https://github.com/user-attachments/assets/ec456ac0-87e6-407d-88c5-d81985354423)<br>[1](https://github.com/user-attachments/assets/44829c65-572d-4999-b493-1e8efa82f427) · [2](https://github.com/user-attachments/assets/fc559091-046e-479a-8f77-976e830fab28) · [3](https://github.com/user-attachments/assets/c055fd25-74d5-4461-a773-81abdfb9bc43) |
 
 ---
