@@ -21,6 +21,7 @@ Video Demonstration (1-2 mins):
 Responsive Layout Snapshots:
 
 (See "Responsive Layout" section below)
+
 https://github.com/user-attachments/assets/ec456ac0-87e6-407d-88c5-d81985354423,
 https://github.com/user-attachments/assets/44829c65-572d-4999-b493-1e8efa82f427,
 https://github.com/user-attachments/assets/fc559091-046e-479a-8f77-976e830fab28,
