@@ -1,92 +1,105 @@
-Axiom Frontend Task - Token Discovery Table
+Axiom Token Discovery Table (Frontend Task)
 
-This project is a high-fidelity, production-grade replica of the Axiom Trade token discovery table. It is built with a focus on performance, clean architecture, and real-time data handling.
+This is a pixel-perfect, feature-complete replica of the Axiom token discovery table, built as a frontend technical assessment.
 
-🚀 Deliverables
+The project meets all technical, performance, and visual requirements by leveraging a modern tech stack including Next.js, React Query for data fetching, and Redux Toolkit for complex UI state.
 
-Live Vercel Deployment: https://tokentrader-one.vercel.app/
+Deliverables Checklist
 
-YouTube Demo: https://YOUR_YOUTUBE_LINK_HERE
+Live Vercel Deployment:
 
-✨ Features Implemented
+https://tokentrader-one.vercel.app/
 
-Pixel-Perfect UI: A close replica of the Axiom "Pulse" page, built with Tailwind CSS and shadcn/ui.
+GitHub Repo:
 
-Three Token Categories: "New pairs," "Final Stretch," and "Migrated" tabs.
+https://github.com/sand33p312/Token_Trader_app.git
 
-Real-time Price Updates: A mock WebSocket updates token prices every 2 seconds, triggering a green/red "flash" animation on the price cell.
+Video Demonstration (1-2 mins):
 
-Advanced State Management:
+(YouTube video link here)
 
-React Query (@tanstack/react-query): Handles all asynchronous data fetching, caching, and real-time cache updates from the mock socket.
+Responsive Layout Snapshots:
 
-Redux Toolkit (@reduxjs/toolkit): Manages all complex UI state, such as the active category and sorting configuration.
+(See "Responsive Layout" section below)
+https://github.com/user-attachments/assets/ec456ac0-87e6-407d-88c5-d81985354423,
+https://github.com/user-attachments/assets/44829c65-572d-4999-b493-1e8efa82f427,
+https://github.com/user-attachments/assets/fc559091-046e-479a-8f77-976e830fab28,
+https://github.com/user-attachments/assets/c055fd25-74d5-4461-a773-81abdfb9bc43
 
-Interactive Table:
+Core Features Checklist
 
-Sorting: Click any table header (Token, Price, TVL, etc.) to sort the list.
+This project successfully implements all required core features:
 
-Tooltips: Informational tooltips on category tabs.
+[x] Token Columns: Implements the three categories (New Pairs, Final Stretch, Migrated) as filterable tabs.
 
-Modal: Click any token row to open a detailed modal for that token.
+[x] Tooltips: Hovering the "i" icon next to each category shows a descriptive tooltip.
 
-Loading States: A shadcn/ui skeleton loader is displayed while the initial data is being fetched.
+[x] Modal: Clicking any token row opens a modal with detailed token information.
 
-Atomic Architecture: The project is structured using atomic design principles for maximum reusability and maintainability.
+[x] Sorting: All columns are sortable by clicking the header (ascending/descending).
 
-Fully Responsive: The layout is fully responsive down to 320px, with the table becoming horizontally scrollable on small screens.
+[x] Hover Effects: Table rows have a clear hover state, and interactive elements (buttons, headers) respond to the cursor.
 
-🛠 Technical Stack
+[x] Click Actions: Tabs, sort headers, and token rows are all clickable with distinct actions.
 
-This project fulfills all technical requirements from the task prompt:
+[x] Real-time Price Updates: A "WebSocket mock" (setInterval) updates token prices every 2 seconds, triggering a smooth red/green color transition to indicate price changes.
 
-Framework: Next.js 14 (App Router)
+[x] Loading States: A shadcn/ui skeleton loader is displayed while the initial data is being fetched.
 
-Language: TypeScript (Strict)
+[x] Pixel-Perfect Visual Match:
 
-Styling: Tailwind CSS
+Uses the correct "Inter" font (loaded via next/font).
 
-UI Components: shadcn/ui (Button, Table, Dialog, Tooltip, Skeleton)
+Matches the 5-column layout (Token, Price, 24h %, TVL, 24h Volume).
 
-Data Fetching: React Query
+Matches header styling (uppercase, letter-spacing, and colors).
 
-State Management: Redux Toolkit
+Implements the dark mode theme across all components.
 
-Optimization: React.memo for rows, useMemo for sorting, next/image for optimized images.
+Corrects for all visual bugs (button text, modal text, etc.).
 
-📂 Project Structure
+Technical Stack & Requirements Checklist
 
-The codebase follows an Atomic Design methodology:
+[x] Next.js 14 App Router
 
-/src
-├── @types          # (from shadcn)
-├── app             # Next.js App Router
-│   ├── layout.tsx  # Root layout with providers
-│   └── page.tsx    # Main page component (assembles organisms)
-├── components
-│   ├── ui          # Atoms (shadcn components)
-│   ├── icons.tsx   # Atoms (custom icons)
-│   ├── molecules
-│   │   └── TokenRow.tsx
-│   └── organisms
-│       ├── TokenTable.tsx
-│       ├── TokenDetailModal.tsx
-│       └── TableSkeleton.tsx
-└── lib
-    ├── QueryProvider.tsx
-    ├── types.ts
-    └── store
-        ├── ReduxProvider.tsx
-        ├── store.ts
-        └── uiSlice.ts
+[x] TypeScript (Strict)
 
+[x] Tailwind CSS
 
-⚙️ Running Locally
+[x] Redux Toolkit: Manages complex UI state (active category, sort configuration).
+
+[x] React Query (@tanstack/react-query): Handles all data fetching, caching, and real-time state updates.
+
+[x] shadcn/ui: Used for all accessible, core components (Table, Dialog, Tooltip, Skeleton, Button).
+
+[x] Performance:
+
+React.memo is used on TokenRow to prevent re-renders of the entire list on price updates.
+
+useMemo is used for efficient sorting and filtering.
+
+Next.js <Image /> component is used with unoptimized={true} for SVG placeholders.
+
+[x] Atomic Architecture: Code is organized into atoms (icons.tsx), molecules (TokenRow.tsx), and organisms (TokenTable.tsx, TokenDetailModal.tsx).
+
+[x] Responsive Layout: The table is horizontally scrollable on all viewports down to 320px.
+
+Responsive Layout Snapshots
+
+(Please take your screenshots and insert them here)
+
+Desktop (1440px)
+
+Tablet (768px)
+
+Mobile (320px) - Showing horizontal scroll
+
+How to Run Locally
 
 Clone the repository:
 
-git clone [https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git](https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git)
-cd YOUR_REPO_NAME
+git clone <YOUR_REPO_LINK_HERE>
+cd token-trader-app
 
 
 Install dependencies:
@@ -100,27 +113,3 @@ npm run dev
 
 
 Open http://localhost:3000 to view the application.
-
-📱 Responsive Design Snapshots
-
-As required, the application is fully responsive.
-
-Desktop (1920px)
-
-Tablet (768px)
-
-Mobile (320px)
-
-(Your desktop screenshot here)
-
-(Your tablet screenshot here)
-
-(Your mobile screenshot here)
-
-[Desktop Screenshot]
-
-[Tablet Screenshot]
-
-[Mobile Screenshot]
-
-(Note: Please take your own screenshots and replace the placeholders above.)
